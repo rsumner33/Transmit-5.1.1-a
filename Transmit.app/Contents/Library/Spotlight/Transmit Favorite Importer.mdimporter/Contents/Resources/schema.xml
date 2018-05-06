@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<schema version="1.0" xmlns="http://www.apple.com/metadata"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://www.apple.com/metadata file:///System/Library/Frameworks/CoreServices.framework/Frameworks/Metadata.framework/Resources/MetadataSchema.xsd">
+
+    <note>
+        Transmit favorite.     
+    </note>
+
+    <attributes>
+        <attribute name="com_panic_transmit_server" multivalued="false" type="CFString"/>
+        <attribute name="com_panic_transmit_username" multivalued="false" type="CFString"/>
+        <attribute name="com_panic_transmit_protocol" multivalued="false" type="CFString"/>
+        <attribute name="com_panic_transmit_port" multivalued="false" type="CFNumber"/>
+        <attribute name="com_panic_transmit_remotePath" multivalued="false" type="CFString"/>
+        <attribute name="com_panic_transmit_localPath" multivalued="false" type="CFString"/>
+        <attribute name="com_panic_transmit_dockSendEnabled" multivalued="false" type="CFBoolean"/>
+        <attribute name="com_panic_transmit_passiveModeEnabled" multivalued="false" type="CFBoolean"/>
+        <attribute name="com_panic_transmit_promptPassword" multivalued="false" type="CFBoolean"/>
+		<attribute name="com_panic_transmit_uniqueIdentifier" multivalued="false" type="CFString"/>
+    </attributes>
+	
+    <types>
+        <type name="com.panic.transmit.favoritemetadata">
+            <allattrs>
+				com_panic_transmit_server
+				com_panic_transmit_username
+				com_panic_transmit_protocol
+				com_panic_transmit_port
+				com_panic_transmit_remotePath
+				com_panic_transmit_localPath
+				com_panic_transmit_dockSendEnabled
+				com_panic_transmit_passiveModeEnabled
+				com_panic_transmit_promptPassword
+				com_panic_transmit_uniqueIdentifier
+            </allattrs>
+			<displayattrs>
+				com_panic_transmit_server
+				com_panic_transmit_username
+				com_panic_transmit_protocol
+				com_panic_transmit_remotePath
+				com_panic_transmit_localPath
+            </displayattrs>
+        </type>
+    </types>
+</schema>
+

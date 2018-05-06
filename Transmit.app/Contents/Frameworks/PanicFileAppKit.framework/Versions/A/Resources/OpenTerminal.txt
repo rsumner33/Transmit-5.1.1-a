@@ -1,0 +1,41 @@
+on openTerminal(location, remoteHost, serverPort)
+	
+	tell application "Terminal"
+		activate
+		
+		set targetTab to ""
+		set sshCommand to ""
+
+		if ((count of remoteHost) is greater than 0) then
+			set cdCommand to " 'cd \"" & location & "\"; eval \"$SHELL -il\"'"
+			set sshCommand to "ssh -t " & "'" & remoteHost & "'"
+		else
+			set cdCommand to "cd \"" & location & "\""
+		end if
+
+		if (serverPort is greater than 0) then
+			set sshCommand to sshCommand & " -p " & serverPort
+		end if
+
+		if ((count of location) is greater than 0) then
+			set sshCommand to sshCommand & cdCommand
+		end if
+
+		if (window 1 exists) and (window 1 is visible) and not (selected tab of window 1 is busy) then
+			set targetTab to selected tab of window 1
+			
+			if ((count of sshCommand) is greater than 0) then
+				do script sshCommand in targetTab
+			end if
+			
+		else
+			
+			if ((count of sshCommand) is greater than 0) then
+				set targetTab to do script sshCommand
+			end if
+			
+		end if
+		
+	end tell
+	
+end openTerminal

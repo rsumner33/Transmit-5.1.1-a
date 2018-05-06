@@ -1,0 +1,15 @@
+
+/* Class = "NSButtonCell"; title = "Done"; ObjectID = "IY1-Jr-oyz"; */
+"IY1-Jr-oyz.title" = "Fertig";
+
+/* Class = "NSTextFieldCell"; title = "<<Do not localize>>"; ObjectID = "J6V-AR-Su6"; */
+"J6V-AR-Su6.title" = "<<Do not localize>>";
+
+/* Class = "NSButtonCell"; title = "Reveal"; ObjectID = "Lrg-t1-84X"; */
+"Lrg-t1-84X.title" = "Einblenden";
+
+/* Class = "NSButtonCell"; title = "Retry"; ObjectID = "YeK-wR-6E4"; */
+"YeK-wR-6E4.title" = "Erneut versuchen";
+
+/* Class = "NSTextFieldCell"; title = "<<Do not localize>>"; ObjectID = "yr4-dQ-LGh"; */
+"yr4-dQ-LGh.title" = "<<Do not localize>>";

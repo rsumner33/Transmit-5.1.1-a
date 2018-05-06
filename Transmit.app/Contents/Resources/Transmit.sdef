@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Dictionary" xmlns:xi="http://www.w3.org/2003/XInclude">
+	<xi:include href="file:///System/Library/ScriptingDefinitions/CocoaStandard.sdef" xpointer="xpointer(/dictionary/suite)"/>
+	
+	<suite name="Transmit Suite" code="TrAn" description="Commands and classes for Transmit scripting.">
+		
+		<enumeration name="saveable file format" code="savf">
+			<enumerator name="text" code="txt " description="Text Document Format">
+				<cocoa string-value="public.text"/>
+			</enumerator>
+		</enumeration>
+		
+		<!-- constants -->
+		<enumeration name="connectprotocol" code="PRot">
+			<enumerator name="FTP" code="FTP " description="FTP Protocol"/>
+			<enumerator name="FTP implicit SSL" code="FSSL" description="FTP with implicit SSL"/>
+			<enumerator name="FTP TLS SSL" code="FTPS" description="FTP with TLS/SSL"/>
+			<enumerator name="S3" code="S3  " description="Amazon S3"/>
+			<enumerator name="SFTP" code="SFTP" description="SFTP"/>
+			<enumerator name="WebDAV" code="WDAV" description="WebDAV"/>
+			<enumerator name="WebDAV HTTPS" code="SDAV" description="WebDAV with HTTPS"/>
+			<enumerator name="Azure" code="AZUR" description="Microsoft Azure"/>
+			<enumerator name="B2" code="BBB2" description="BackBlaze B2 Cloud Storage"/>
+			<enumerator name="Box" code="BOX " description="Box"/>
+			<enumerator name="Cloud Drive" code="AZCD" description="Amazon Cloud Drive"/>
+			<enumerator name="Cloud Files" code="RSCF" description="Rackspace Cloud Files"/>
+			<enumerator name="DreamObjects" code="DMOB" description="DreamHost DreamObjects"/>
+			<enumerator name="Dropbox" code="DBX " description="Dropbox"/>
+			<enumerator name="Google Drive" code="GDRV" description="Google Drive"/>
+			<enumerator name="OneDrive" code="1DRV" description="Microsoft OneDrive"/>
+			<enumerator name="OneDrive for Business" code="1DRB" description="Microsoft OneDrive for Business"/>
+			<enumerator name="OpenStack Swift" code="SWFT" description="OpenStack Swift"/>
+		</enumeration>
+		
+		<enumeration name="resumetype" code="resu">
+			<enumerator name="ask" code="aTRN" description="Ask how to proceed if a duplicate file exists."/>
+			<enumerator name="overwrite" code="oTRN" description="Overwrite a duplicate file."/>
+			<enumerator name="resume" code="rTRN" description="Try and continue transferring a duplicate file."/>
+			<enumerator name="skip" code="sTRN" description="Skip a duplicate file."/>
+			<enumerator name="both" code="bTRN" description="Keep both files, renaming the new item."/>
+		</enumeration>
+		
+		<enumeration name="itemtype" code="BIty">
+			<enumerator name="folder item" code="FKfo" description="Browser item folders."/>
+			<enumerator name="file item" code="FKfi" description="Browser item files."/>
+			<enumerator name="alias item" code="FKal" description="Browser item aliases."/>
+			<enumerator name="smart folder item" code="FKsm" description="Browser item smart folders."/>
+		</enumeration>
+		
+		<class-extension description="Transmit's top level scripting object." extends="application">
+			<cocoa class="NSApplication"/>
+			
+			<element type="favorite" access="r">
+				<cocoa key="favorites"/>
+			</element>
+			
+			<element type="skip rule" access="r">
+				<cocoa key="skiplist"/>
+			</element>
+			
+			<property name="suppress errors" code="TrSE" type="boolean" description="Do not show error dialogs during AppleScript execution (they are shown by default).">
+				<cocoa key="suppressAppleScriptDialogs"/>
+			</property>
+		</class-extension>
+		
+		<class name="document" code="docu" description="A Transmit document." inherits="document">
+			<cocoa class="TRDocument"/>
+			
+			<element type="tab">
+				<cocoa key="tabControllers"/>
+			</element>
+			
+			<property name="current tab" code="doTa" type="tab" description="The currently visible tab in the document.">
+				<cocoa key="selectedTabController"/>
+			</property>
+		</class>
+	
+		<class name="tab" code="TaBc" description="A tab in Transmit.">
+			<cocoa class="TabViewController"/>
+			
+			<element type="file browser">
+				<cocoa key="fileViewControllers"/>
+			</element>
+			<property name="name" code="pnam" description="The current name of the tab." type="text" access="r">
+				<cocoa key="title"/>
+			</property>
+			<property name="local browser" code="TaLV" type="file browser" access="r" description="The active local file browser if available.">
+				<cocoa key="localFileViewController"/>
+			</property>
+			<property name="remote browser" code="TaRV" type="file browser" access="r" description="The active remote file browser if available.">
+				<cocoa key="remoteFileViewController"/>
+			</property>
+			<property name="left browser" code="TLeV" type="file browser" access="r" description="The left file browser if available.">
+				<cocoa key="leftFileViewController"/>
+			</property>
+			<property name="right browser" code="TLrV" type="file browser" access="r" description="The right file browser if available.">
+				<cocoa key="rightFileViewController"/>
+			</property>
+			<property name="identifier" code="ID  " description="The identifier for the tab." type="text" access="r">
+				<cocoa key="identifier"/>
+			</property>
+			<responds-to command="connect">
+				<cocoa method="connectToScriptCommand:"/>
+			</responds-to>
+			<responds-to command="close">
+				<cocoa method="closeScriptCommand:"/>
+			</responds-to>
+		</class>
+		
+		<class name="file browser" code="FilV" description="A file browser in Transmit.">
+			<cocoa class="FileViewController"/>
+			
+			<element type="browser item" plural="browser items" access="r">
+				<cocoa key="files"/>
+			</element>
+			
+			<element type="selected browser item" plural="selected browser items" access="r">
+				<cocoa key="selectedFiles"/>
+			</element>
+		
+			<property name="root path" code="FiCP" type="text" access="rw" description="The current file browser path." >
+				<cocoa key="currentPath"/>
+			</property>
+			<property name="remote" code="FiIR" type="boolean" access="r" description="Whether the file browser is listing remote files." >
+				<cocoa key="isRemote"/>
+			</property>
+			<property name="show hidden" code="FiSH" type="boolean" description="Whether the file browser is showing invisible files." >
+				<cocoa key="showHiddenFiles"/>
+			</property>
+			<property name="address" code="Addr" type="text" access="r" description="The server address the file browser is associated with (if applicable).">
+				<cocoa key="address"/>
+			</property>
+			<property name="username" code="FAUn" type="text" access="r" description="The server user name the file browser is associated with (if applicable).">
+				<cocoa key="username"/>
+			</property>
+			<property name="identifier" code="ID  " description="The identifier for the browser." type="text" access="r">
+				<cocoa key="identifier"/>
+			</property>
+
+			<responds-to command="close">
+				<cocoa method="disconnectScriptCommand:"/>
+			</responds-to>
+			<responds-to command="change location">
+				<cocoa method="changeDirectoryScriptCommand:"/>
+			</responds-to>
+			<responds-to command="create folder">
+				<cocoa method="createFolderWithNameScriptCommand:"/>
+			</responds-to>
+			<responds-to command="create file">
+				<cocoa method="createFileWithNameScriptCommand:"/>
+			</responds-to>
+			<responds-to command="refresh">
+				<cocoa method="refreshScriptCommand:"/>
+			</responds-to>
+			<responds-to command="synchronize">
+				<cocoa method="syncScriptCommand:"/>
+			</responds-to>
+			<responds-to command="rename">
+				<cocoa method="renameScriptCommand:"/>
+			</responds-to>
+			<responds-to command="upload">
+				<cocoa method="uploadScriptCommand:"/>
+			</responds-to>
+			<responds-to command="download">
+				<cocoa method="downloadScriptCommand:"/>
+			</responds-to>
+			<responds-to command="delete item">
+				<cocoa method="deleteScriptCommand:"/>
+			</responds-to>
+			<responds-to command="create URL">
+				<cocoa method="createURLScriptCommand:"/>
+			</responds-to>
+			
+		</class>
+		
+		<class name="favorite" code="FAvr" description="A favorite server in Transmit.">
+			<cocoa class="TRConnectionItem"/>
+			<property name="address" code="Addr" description="The address of the server." type="text" access="r">
+				<cocoa key="address"/>
+			</property>
+			<property name="local path" code="FAlp" description="The local path for the server." type="text" access="r">
+				<cocoa key="localPath"/>
+			</property>
+			<property name="port" code="FApo" description="The port to connect to for a server." type="integer" access="r">
+				<cocoa key="port"/>
+			</property>
+			<property name="protocol" code="FApr" description="The protocol a server uses to connect." type="connectprotocol" access="r">
+				<cocoa key="protocol"/>
+			</property>
+			<property name="remote path" code="FArp" description="The remote path for a server." type="text" access="r">
+				<cocoa key="remotePath"/>
+			</property>
+			<property name="name" code="pnam" description="The name of a favorite server." type="text" access="r">
+				<cocoa key="name"/>
+			</property>
+			<property name="URL" code="FAur" description="The root URL specified for a server." type="text" access="r">
+				<cocoa key="siteURL"/>
+			</property>
+			<property name="user name" code="FAun" description="The user name for a server." type="text" access="r">
+				<cocoa key="username"/>
+			</property>
+			<property name="identifier" code="ID  " type="text" access="r" description="The unique identifier for a server.">
+				<cocoa key="identifier"/>
+			</property>
+		</class>
+		
+		<class name="skip rule" code="SkRu" description="A Transmit Skip Rule.">
+			<cocoa class="PCPredicateGroup"/>
+			
+			<property name="name" code="pnam" type="text" access="r" description="The name of the skip rule.">
+				<cocoa key="name"/>
+			</property>
+			
+			<property name="enabled" code="skEn" type="boolean" access="r" description="Is the skip rule currently enabled in Transmit.">
+				<cocoa key="enabled"/>
+			</property>
+			
+			<property name="identifier" code="ID  " type="text" access="r" description="The unique identifier of the rule.">
+				<cocoa key="identifier"/>
+			</property>
+		</class>
+		
+		<class name="browser item" code="PAbi" description="A file, folder or alias.">
+			<cocoa class="PCApplescriptNodeWrapper"/>
+			
+			<property name="name" code="pnam" type="text" access="r" description="The name of the browser item.">
+				<cocoa key="name"/>
+			</property>
+		
+			<property name="display name" code="PAdn" type="text" access="r" description="The display name of the browser item.">
+				<cocoa key="displayName"/>
+			</property>
+					
+			<property name="path" code="PApa" type="text" access="r" description="The path of the browser item.">
+				<cocoa key="path"/>
+			</property>
+			
+			<property name="size" code="PAsz" type="real" access="r" description="The logical size of the browser item.">
+				<cocoa key="size"/>
+			</property>
+			
+			<property name="physical size" code="PApz" type="real" access="r" description="The actual space used on disk of the browser item.">
+				<cocoa key="physicalSize"/>
+			</property>
+			
+			<property name="creation date" code="PAcd" type="date" access="r" description="The date on which the browser item was created.">
+				<cocoa key="creationDate"/>
+			</property>
+
+			<property name="modification date" code="PAmd" type="date" access="r" description="The date on which the browser item was last modified.">
+				<cocoa key="modificationDate"/>
+			</property>
+			
+			<property name="item type" code="BIty" type="itemtype" access="r" description="The type of the browser item.">
+				<cocoa key="type"/>
+			</property>
+	
+		</class>
+
+		<class name="selected browser item" code="PAsb" description="A file, folder or alias." inherits="browser item">
+			<cocoa class="PCApplescriptNodeWrapper"/>
+		</class> 
+
+							
+		<!-- top level commands -->
+		<command name="get URL" code="GURLGURL" description="Open a selected URL from a different application.">
+			<direct-parameter description="url parameter passed to the command as text." type="text"/>
+		</command>
+		
+		<command name="open URL" code="WWW!OURL" description="Open a selected URL from a different application.">
+			<direct-parameter description="url parameter passed to the command as text." type="text"/>
+		</command>
+		
+		<!-- tab commands -->
+		<command name="connect" code="TrAnConf" description="Connect to a favorite server or a specified server.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter type="tab" code="CoTa"  hidden="yes" description="Tab to act on.">
+				<cocoa key="TabViewController"/>
+			</direct-parameter>
+			<parameter name="to" code="CoFa" description="The favorite server to connect to." type="favorite" optional="yes">
+				<cocoa key="Favorite"/>
+			</parameter>
+			<parameter name="to address" code="CoAd" description="The address to connect to." type="text" optional="yes">
+				<cocoa key="Address"/>
+			</parameter>
+			<parameter name="as user" code="CoUs" description="The user name to use when connecting." type="text" optional="yes">
+				<cocoa key="User"/>
+			</parameter>
+			<parameter name="using port" code="CoPo" description="The network port to use when connecting." type="integer" optional="yes">
+				<cocoa key="Port"/>
+			</parameter>
+			<parameter name="with initial path" code="CoIp" description="The initial path to change to after the connection is made." type="text" optional="yes">
+				<cocoa key="InitialPath"/>
+			</parameter>
+			<parameter name="with password" code="CoPa" description="The password to use when connecting." type="text" optional="yes">
+				<cocoa key="Password"/>
+			</parameter>
+			<parameter name="with protocol" code="CoPr" description="The connection type to use when connecting." type="connectprotocol" optional="yes">
+				<cocoa key="Protocol"/>
+			</parameter>
+			<parameter name="mount" code="CoMo" description="Try to mount the disk in the Finder." type="boolean" optional="yes">
+				<cocoa key="Mount"/>
+			</parameter>
+			<result description="Whether the connection was successful." type="boolean"/>
+		</command>
+		
+		<!-- file browser commands -->
+		<command name="change location" code="TrAnDisc" description="Change the current location of the file browser.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter type="file browser" code="DiFi"  hidden="yes" description="File browser to act on.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="to path" code="DiPa" type="text" description="The path you want to change to." >
+				<cocoa key="Path"/>
+			</parameter>
+			<result description="Whether the change location was successful." type="boolean"/>
+		</command>
+		
+		<command name="create folder" code="TrAnFold" description="Create a new folder.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter type="file browser" code="FoFi" description="File browser to act on." hidden="yes">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="named" code="FoNa" description="The name for the new folder." type="text">
+				<cocoa key="Name"/>
+			</parameter>
+			<result description="Whether the folder creation was successful." type="boolean"/>
+		</command>
+		
+		<command name="create file" code="TrAnFile" description="Create a new file.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter type="file browser" code="FiFi" hidden="yes" description="File browser to act on.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="named" code="FiNa" type="text" description="The name for the new file.">
+				<cocoa key="Name"/>
+			</parameter>
+			<result description="Whether the file creation was successful." type="boolean"/>
+		</command>
+		
+		<command name="refresh" code="TrAnRefr" description="Refresh the file list.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter type="file browser" code="FiFi" hidden="yes" description="File browser to act on.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+		</command>
+		
+		<command name="synchronize" code="TrAnSync" description="Update files located on the destination with files located on the source.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter code="SyFi" type="file browser" hidden="yes" description="The file browser to synchronize from.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="to" code="SyTo" type="file browser" description="The file browser to synchronize with.">
+				<cocoa key="To"/>
+			</parameter>
+			<parameter name="delete orphaned items" code="SyOr" type="boolean" optional="yes" description="Delete destination browser items that do not exist in the source browser." >
+				<cocoa key="DeleteOrphaned"/>
+			</parameter>
+			<parameter name="compare using size" code="SySz" type="boolean" optional="yes" description="Compare modified files using file size instead of modification date.">
+				<cocoa key="CompareSize"/>
+			</parameter>
+			<parameter name="follow symlinks" code="Syln" type="boolean" optional="yes" description="Follow symlinks when sychronizing folders.">
+				<cocoa key="FollowSymlinks"/>
+			</parameter>
+			<parameter name="automatically determine time offset" code="SyTa" type="boolean" optional="yes" description="Try to determine the server time offset automatically.">
+				<cocoa key="DetermineOffset"/>
+			</parameter>
+			<parameter name="with time offset" code="SyWT" type="integer" optional="yes" description="The time offset (in hours) of the server from your local computer's time.">
+				<cocoa key="TimeOffset"/>
+			</parameter>
+			<parameter name="files modified since" code="SyEC" type="date" optional="yes" description="Synchronize files which only have been modified since a given date.">
+				<cocoa key="ModifiedSinceDate"/>
+			</parameter>
+			<parameter name="using skip rules" code="SySr" optional="yes" description="A list of skip rules to apply to the synchronization.">
+				<type type="skip rule" list="yes"/>
+				<cocoa key="SkipRules"/>
+			</parameter>
+			<parameter name="save report to path" code="SySA" type="text" optional="yes" description="The file path to save the synchronization report.">
+				<cocoa key="ReportPath"/>
+			</parameter>
+			<result description="Whether the synchronization was successful." type="boolean"/>
+		</command>
+		
+		<command name="rename" code="TrAnRena" description="Rename a file at a path.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter code="ReFi" type="file browser" hidden="yes" description="The file browser to rename in.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="item at path" code="RePa" type="text" description="The path to the item being renamed.">
+				<cocoa key="Path"/>
+			</parameter>
+			<parameter name="to" code="ReTo" type="text" description="The new name of the item.">
+				<cocoa key="To"/>
+			</parameter>
+			<result description="Whether the rename was successful." type="boolean"/>
+		</command>
+		
+		<command name="download" code="TrAnDown" description="Download a file at a path.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter code="DoFi" type="file browser" hidden="yes" description="The file browser to download from.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="item at path" code="DoPa" type="text" description="The path of the remote item being downloaded.">
+				<cocoa key="Path"/>
+			</parameter>
+			<parameter name="to" code="DoTo" type="text" optional="yes" description="The local folder path to download the item to.">
+				<cocoa key="To"/>
+			</parameter>
+			<parameter name="with resume mode" code="DoRm" type="resumetype" optional="yes" description="The action to take if a duplicate file exists.">
+				<cocoa key="ResumeMode"/>
+			</parameter>
+			<parameter name="continue after error" code="DoCo" type="boolean" optional="yes" description="Continue the download if an error occurs.">
+				<cocoa key="ContinueOnError"/>
+			</parameter>
+			<parameter name="using skip rules" code="DoSr" optional="yes" description="A list of skip rules to apply to the download.">
+				<type type="skip rule" list="yes"/>
+				<cocoa key="SkipRules"/>
+			</parameter>
+			<result description="Whether the download was successful." type="boolean"/>
+		</command>
+
+		<command name="upload" code="TrAnUplo" description="Upload a file at a path.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter code="UpFi" type="file browser" hidden="yes" description="The file browser to upload to.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="item at path" code="UpPa" type="text" description="The path of the local item being uploaded.">
+				<cocoa key="Path"/>
+			</parameter>
+			<parameter name="to" code="UpTo" type="text" optional="yes" description="The remote folder path to upload the item to.">
+				<cocoa key="To"/>
+			</parameter>
+			<parameter name="with resume mode" code="UpRm" type="resumetype" optional="yes" description="The action to take if a duplicate file exists.">
+				<cocoa key="ResumeMode"/>
+			</parameter>
+			<parameter name="continue after error" code="UpCo" type="boolean" optional="yes" description="Continue the upload if an error occurs.">
+				<cocoa key="ContinueOnError"/>
+			</parameter>
+			<parameter name="using skip rules" code="upSr" optional="yes" description="A list of skip rules to apply to the upload.">
+				<type type="skip rule" list="yes"/>
+				<cocoa key="SkipRules"/>
+			</parameter>
+			<result description="Whether the upload was successful." type="boolean"/>
+		</command>
+		
+		<command name="delete item" code="TrAnDele" description="Delete a file at a path.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter code="DeFi" type="file browser" hidden="yes" description="The file browser to delete in.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="at path" code="DePa" type="text" description="The path of the item being deleted.">
+				<cocoa key="Path"/>
+			</parameter>
+			<result description="Whether the delete was successful." type="boolean"/>
+		</command>
+		
+		<command name="create URL" code="TrAnCurl" description="Creates and copies a public file URL to the Clipboard.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter code="CpFi" type="file browser" hidden="yes" description="The file browser to copy from.">
+				<cocoa key="FileBrowser"/>
+			</direct-parameter>
+			<parameter name="from path" code="CpPa" type="text" description="The path of the item to create the URL from.">
+				<cocoa key="Path"/>
+			</parameter>
+			<result description="Whether the URL creation and copy was successful." type="boolean"/>
+		</command>
+
+		
+	</suite>
+	
+</dictionary>

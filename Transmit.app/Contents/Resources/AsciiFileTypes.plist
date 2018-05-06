@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AsciiFileTypes</key>
+	<array>
+		<string>c</string>
+		<string>cgi</string>
+		<string>cp</string>
+		<string>cpp</string>
+		<string>css</string>
+		<string>h</string>
+		<string>hqx</string>
+		<string>htaccess</string>
+		<string>htm</string>
+		<string>html</string>
+		<string>java</string>
+		<string>js</string>
+		<string>l</string>
+		<string>m</string>
+		<string>p</string>
+		<string>py</string>
+		<string>pas</string>
+		<string>php</string>
+		<string>php3</string>
+		<string>pl</string>
+		<string>pm</string>
+		<string>rb</string>
+		<string>rhtml</string>
+		<string>rxml</string>
+		<string>sh</string>
+		<string>shtml</string>
+		<string>txt</string>
+		<string>uu</string>
+		<string>uue</string>
+		<string>y</string>
+	</array>
+</dict>
+</plist>
